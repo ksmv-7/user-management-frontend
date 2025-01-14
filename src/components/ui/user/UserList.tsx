@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { UserCard } from './UserCard';
 import { useListPaginatedUsers } from '../../../hooks/crud/useReadUser';
-import { MemoizedLoadMoreButton } from '../common/Button';
+import { LoadMoreButton } from '../common/Button';
 
 const Grid = styled.div`
   display: grid;
@@ -40,7 +40,7 @@ export const UserList = () => {
       </Grid>
 
       <div>
-        <MemoizedLoadMoreButton
+        <LoadMoreButton
           onClick={fetchNextPage}
           isFetchingNextPage={isFetchingNextPage}
           hasNextPage={hasNextPage}
