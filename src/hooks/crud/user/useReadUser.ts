@@ -1,7 +1,29 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { fetchDebouncedUsers, fetchPaginatedUsers } from "../../../api/users.service";
+import { fetchDebouncedUsers, fetchPaginatedUsers, fetchUser } from "../../../api/users.service";
+import { useParams } from "react-router-dom";
 
-export const useListPaginatedUsers = () => {
+
+  export const useReadUser = (userId?: string) => {
+    const { id } = useParams();
+    const definedUserId = userId || id;
+    const {
+      data,
+      isLoading,
+      isError,
+    } = useQuery({
+      queryKey: ['users', userId],
+      queryFn: () => fetchUser(definedUserId),
+      enabled: !userId,
+    });
+
+    return {
+      user: data,
+      isUserLoading: isLoading,
+      isUserError: isError,
+    }
+  };
+
+  export const useListPaginatedUsers = () => {
   const {
     data,
     fetchNextPage,
@@ -35,7 +57,7 @@ export const useListDebouncedUsers = (query: string) => {
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ['users', 'debounced', query],
+    queryKey: ['users', 'by-filter'],
     queryFn: () => fetchDebouncedUsers(query),
     enabled: query?.length >= 3,
   });

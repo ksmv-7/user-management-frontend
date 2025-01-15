@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { useDebounce } from '../../../hooks/common/useDebounce';
 import { useListDebouncedUsers } from '../../../hooks/crud/user/useReadUser';
 import { useNavigate } from 'react-router-dom';
+import { useSelectedUser } from '../../../context/user/UserContext';
+import { User } from '../../../types/user/types';
 
 const SearchWrapper = styled.div`
   position: relative;
@@ -60,14 +62,16 @@ export const SearchBar = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const debounceSearch = useDebounce({ value: searchTerm, delay: 200 });
   const { debouncedUsersData } = useListDebouncedUsers(debounceSearch);
+    const { setSelectedUser } = useSelectedUser();
   const navigate = useNavigate();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
-  const handleResultClick = (userId: string) => {
-    navigate(`/users/${userId}`);
+  const handleResultClick = (user: User) => {
+    navigate(`/users/${user.id}`);
+    setSelectedUser(user)
   };
   const userData = debouncedUsersData ?? [];
 
@@ -85,7 +89,7 @@ export const SearchBar = () => {
           {userData.map((user) => (
             <SearchResultItem
               key={user.id}
-              onClick={() => handleResultClick(user.id)}
+              onClick={() => handleResultClick(user)}
             >
               {user.email}
             </SearchResultItem>

@@ -4,6 +4,8 @@ import { useListPaginatedUsers } from '../../../hooks/crud/user/useReadUser';
 import { LoadMoreButton } from '../common/Button';
 import { useNavigate } from 'react-router-dom';
 import { SearchBar } from '../common/SearchBar';
+import { useSelectedUser } from '../../../context/user/UserContext';
+import { User } from '../../../types/user/types';
 
 const Grid = styled.div`
   display: grid;
@@ -23,6 +25,8 @@ export const UserList = () => {
     isPaginatedUsersError,
   } = useListPaginatedUsers();
 
+  const { setSelectedUser } = useSelectedUser();
+  
   const navigate = useNavigate();
 
   if (isPaginatedUsersLoading) {
@@ -31,7 +35,9 @@ export const UserList = () => {
   if (isPaginatedUsersError) {
     navigate('/error')
   }
-
+  const handleClickUser = (user: User) => {
+    setSelectedUser(user)
+  };
   const users = paginatedUsersData?.pages.flatMap((group) => group.users) || [];
 
   return (
@@ -39,7 +45,7 @@ export const UserList = () => {
       <SearchBar />
       <Grid>
         {users.map((user) => (
-          <UserCard key={user.id} user={user} />
+          <UserCard key={user.id} user={user} onClick={handleClickUser} />
         ))}
       </Grid>
 

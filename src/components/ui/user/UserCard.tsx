@@ -45,16 +45,20 @@ const Detail = styled.div`
   }
 `;
 
-export const UserCard = ({ user }: { user: User; }) => {
+type UserCardProps = {
+  user: User;
+  onClick: (user: User) => void;
+}
+export const UserCard = ({ user, onClick }: UserCardProps) => {
   
-  const { mutate: deleteUserMutate } = useDeleteUser();
+  const { deleteUserMutation } = useDeleteUser();
 
   const handleDelete = () => {
-    deleteUserMutate(user.id);
+    deleteUserMutation(user.id);
   };
 
   return (
-    <Card>
+    <Card onClick={() => onClick(user)}>
       <Header>
         <Link to={`/users/${user.id}`}>
           <Name>{user.name}</Name>
