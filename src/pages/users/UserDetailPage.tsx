@@ -1,10 +1,10 @@
-import { UserForm } from '../../components/ui/user/UserForm';
+import { UserDetailForm } from '../../components/ui/user/forms/UserDetailForm';
 
 const UserDetailPage = () => {
 
   return (
     <div>
-      <UserForm />
+      <UserDetailForm />
     </div>
   );
 };

@@ -2,9 +2,10 @@ import styled from 'styled-components';
 import { UserCard } from './UserCard';
 import { useListPaginatedUsers } from '../../../hooks/crud/user/useReadUser';
 import { LoadMoreButton } from '../common/Button';
-import { useNavigate } from 'react-router-dom';
 import { SearchBar } from '../common/SearchBar';
 import { useSelectedUser } from '../../../context/user/UserContext';
+import { useNavigate } from 'react-router-dom';
+import { AddUserButton } from '../common/Button';
 import { User } from '../../../types/user/types';
 
 const Grid = styled.div`
@@ -15,7 +16,6 @@ const Grid = styled.div`
 `;
 
 export const UserList = () => {
-
   const {
     paginatedUsersData,
     fetchNextPage,
@@ -26,29 +26,30 @@ export const UserList = () => {
   } = useListPaginatedUsers();
 
   const { setSelectedUser } = useSelectedUser();
-  
   const navigate = useNavigate();
 
   if (isPaginatedUsersLoading) {
     return <p>Loading users...</p>;
   }
   if (isPaginatedUsersError) {
-    navigate('/error')
+    navigate('/error');
   }
+
   const handleClickUser = (user: User) => {
-    setSelectedUser(user)
+    setSelectedUser(user);
   };
+
   const users = paginatedUsersData?.pages.flatMap((group) => group.users) || [];
 
   return (
     <>
+      <AddUserButton />
       <SearchBar />
       <Grid>
         {users.map((user) => (
           <UserCard key={user.id} user={user} onClick={handleClickUser} />
         ))}
       </Grid>
-
       <div>
         <LoadMoreButton
           onClick={fetchNextPage}
@@ -56,7 +57,6 @@ export const UserList = () => {
           hasNextPage={hasNextPage}
         />
       </div>
-
     </>
   );
 };

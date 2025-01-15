@@ -1,4 +1,5 @@
 import styled  from "styled-components";
+import { useNavigate } from 'react-router-dom';
 
 type ButtonProps = {
   onClick: () => void;
@@ -49,4 +50,30 @@ export const DeleteButton = ({ onClick }: ButtonProps) => {
       Delete
     </DeleteButtonStyle>
   );
+};
+
+const Button = styled.button`
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+export const AddUserButton = () => {
+  const navigate = useNavigate();
+
+  const handleAddUser = () => {
+    navigate('/users/new');
+  };
+
+  return <Button onClick={handleAddUser}>Add User</Button>;
 };

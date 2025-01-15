@@ -1,5 +1,5 @@
 import { BACKEND_URL } from "../consts";
-import { User, UserUpdatePayload } from "../types/user/types";
+import { User, UserCreatePayload, UserUpdatePayload } from "../types/user/types";
 
 export const fetchUser = async (id?: string) => {
   const response = await fetch(`${BACKEND_URL}/users/${id}`);
@@ -19,6 +19,18 @@ export const fetchDebouncedUsers = async (query: string) => {
   const response = await fetch(`${BACKEND_URL}/users/by-filter?query=${query}`);
   return await response.json() as User[];
 };
+
+export const createUser = async (body: UserCreatePayload) => {
+  const response = await fetch(`${BACKEND_URL}/users`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+  return response.json();
+};
+
 
 export const updateUser = async (id: string, body: UserUpdatePayload) => {
   const response = await fetch(`${BACKEND_URL}/users/${id}`, {

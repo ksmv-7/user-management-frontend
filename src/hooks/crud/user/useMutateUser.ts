@@ -1,7 +1,28 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteUser, updateUser } from '../../../api/users.service';
+import { createUser, deleteUser, updateUser } from '../../../api/users.service';
 import { useAlert } from '../../alerts/useAlert';
-import { UserUpdatePayload } from '../../../types/user/types';
+import { UserCreatePayload, UserUpdatePayload } from '../../../types/user/types';
+
+export function useCreateUser() {
+  const { showAlertSuccess, showAlertError } = useAlert();
+  const queryClient = useQueryClient();
+
+  const { mutate } = useMutation({
+    mutationFn: async (body: UserCreatePayload ) => {
+      return createUser(body);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      showAlertSuccess();
+    },
+    onError: () => {
+      showAlertError();
+    },
+  });
+  return {
+    createUserMutation: mutate,
+  }
+}
 
 export function useUpdateUser() {
   const { showAlertSuccess, showAlertError } = useAlert();
@@ -9,7 +30,7 @@ export function useUpdateUser() {
 
   const { mutate } = useMutation({
     mutationFn: async ({ userId, body }: { userId: string; body: UserUpdatePayload }) => {
-      return await updateUser(userId, body);
+      return updateUser(userId, body);
     },
     onSuccess: (userId) => {
       queryClient.invalidateQueries({ queryKey: ['user', userId] });

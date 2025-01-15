@@ -1,12 +1,8 @@
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UserSchema } from '../../../schemas/user.schema';
-import { useSelectedUser } from '../../../context/user/UserContext';
+import { UserSchema } from '../../../../schemas/user.schema';
 import styled from 'styled-components';
-import { useUpdateUser } from '../../../hooks/crud/user/useMutateUser';
-import { useReadUser } from '../../../hooks/crud/user/useReadUser';
-import { useAlert } from '../../../hooks/alerts/useAlert';
+import { useCreateUser } from '../../../../hooks/crud/user/useMutateUser';
 
 type FormValues = {
   name: string;
@@ -84,15 +80,12 @@ const SubmitButton = styled.button`
   }
 `;
 
-export const UserForm = () => {
-  const { updateUserMutation } = useUpdateUser();
-  const { selectedUser } = useSelectedUser();
-  const { user } = useReadUser(selectedUser?.id);
+export const UserCreateForm = () => {
+  const { createUserMutation } = useCreateUser();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<FormValues>({
     resolver: zodResolver(UserSchema),
     defaultValues: {
@@ -102,36 +95,14 @@ export const UserForm = () => {
     },
   });
 
-  const { showAlertError } = useAlert();
-  
-  useEffect(() => {
-    const userData = selectedUser || user;
-    if (userData) {
-      reset({
-        name: userData.name || '',
-        email: userData.email || '',
-        phone: userData.phone || '',
-      });
-    }
-  }, [selectedUser, user, reset]);
-  
-
-  if (!selectedUser?.id && !user?.id) {
-    return <p>No user selected.</p>;
-  }
-  
-  const displayUser = selectedUser?.id ? selectedUser : user;
   
   const onSubmit = async (values: FormValues) => {
-    if (!displayUser?.id) {
-      showAlertError("Valid user ID is required for submission");
-      return;
-    }
-    updateUserMutation({ userId: displayUser.id, body: values });
+  
+    createUserMutation( values );
   };  
   return (
     <FormWrapper>
-      <Title>Edit User: {displayUser?.name}</Title>
+      <Title>Create User</Title>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormGroup>
           <Label>Name</Label>
@@ -151,7 +122,7 @@ export const UserForm = () => {
           {errors.phone && <ErrorText>{errors.phone.message}</ErrorText>}
         </FormGroup>
 
-        <SubmitButton type="submit">Update User</SubmitButton>
+        <SubmitButton type="submit">Create User</SubmitButton>
       </Form>
     </FormWrapper>
   );
