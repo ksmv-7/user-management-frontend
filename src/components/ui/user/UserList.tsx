@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { UserCard } from './UserCard';
-import { useListPaginatedUsers } from '../../../hooks/crud/useReadUser';
+import { useListPaginatedUsers } from '../../../hooks/crud/user/useReadUser';
 import { LoadMoreButton } from '../common/Button';
+import { useNavigate } from 'react-router-dom';
 
 const Grid = styled.div`
   display: grid;
@@ -11,22 +12,24 @@ const Grid = styled.div`
 `;
 
 export const UserList = () => {
+
   const {
     paginatedUsersData,
     fetchNextPage,
     hasNextPage,
     isFetching,
     isFetchingNextPage,
-    isListUsersLoading,
-    isListUsersError,
+    isPaginatedUsersLoading,
+    isPaginatedUsersError,
   } = useListPaginatedUsers();
 
+  const navigate = useNavigate();
 
-  if (isListUsersLoading) {
+  if (isPaginatedUsersLoading) {
     return <p>Loading users...</p>;
   }
-  if (isListUsersError) {
-    return <p>Fetching failed</p>;
+  if (isPaginatedUsersError) {
+    navigate('/error')
   }
 
   const users = paginatedUsersData?.pages.flatMap((group) => group.users) || [];

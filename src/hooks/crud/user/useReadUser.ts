@@ -1,7 +1,8 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchUsers } from "../../api/users.service";
+import { fetchUsers } from "../../../api/users.service";
 
 export const useListPaginatedUsers = () => {
+
   const {
     data,
     fetchNextPage,
@@ -10,7 +11,6 @@ export const useListPaginatedUsers = () => {
     isFetchingNextPage,
     isLoading,
     isError,
-    error
   } = useInfiniteQuery({
     queryKey: ['users'],
     queryFn: ({ pageParam = 1 }) => fetchUsers({ pageParam, limit: 3 }),
@@ -20,9 +20,8 @@ export const useListPaginatedUsers = () => {
 
   return {
     paginatedUsersData: data,
-    isListUsersLoading: isLoading,
-    isListUsersError: isError,
-    listUsersError: error,
+    isPaginatedUsersLoading: isLoading,
+    isPaginatedUsersError: isError,
     fetchNextPage,
     hasNextPage,
     isFetching,

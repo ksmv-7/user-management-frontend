@@ -1,11 +1,18 @@
 import { Routes, Route } from 'react-router-dom';
-import { UserListPage, UserDetailPage } from '../../pages/users';
+import React, { Suspense } from 'react';
+
+const UserListPage = React.lazy(() => import('../../pages/users/UserListPage'));
+const UserDetailPage = React.lazy(() => import('../../pages/users/UserDetailPage'));
+const ErrorPage = React.lazy(() => import('../../pages/common/Error'));
 
 export const RoutesWrapper = () => {
   return (
-    <Routes>
-      <Route path="/users" element={<UserListPage />} />
-      <Route path="/users/:id" element={<UserDetailPage />} />
-    </Routes>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Routes>
+        <Route path="/" element={<UserListPage />} />
+        <Route path="/users/:id" element={<UserDetailPage />} />
+        <Route path="/error" element={<ErrorPage />} />
+      </Routes>
+    </Suspense>
   );
 };

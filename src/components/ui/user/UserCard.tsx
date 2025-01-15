@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { FiPhone, FiMail } from 'react-icons/fi';
 import { User } from '../../../types/user/types';
 import { Link } from 'react-router-dom';
+import { DeleteButton } from '../common/Button';
+import { useDeleteUser } from '../../../hooks/crud/user/useMutateUser';
 
 const Card = styled.div`
   background: #fff;
@@ -14,6 +16,15 @@ const Card = styled.div`
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Name = styled.h2`
@@ -34,19 +45,28 @@ const Detail = styled.div`
   }
 `;
 
-export const UserCard = ({ user }: { user: User }) => {
+export const UserCard = ({ user }: { user: User; }) => {
+  
+  const { mutate: deleteUserMutate } = useDeleteUser();
+
+  const handleDelete = () => {
+    deleteUserMutate(user.id);
+  };
 
   return (
-    <Link to={`/users/${user.id}`}>
-      <Card>
-        <Name>{user.name}</Name>
-        <Detail>
-          <FiMail /> {user.email}
-        </Detail>
-        <Detail>
-          <FiPhone /> {user.phone}
-        </Detail>
-      </Card>
-    </Link>
+    <Card>
+      <Header>
+        <Link to={`/users/${user.id}`}>
+          <Name>{user.name}</Name>
+        </Link>
+        <DeleteButton onClick={handleDelete} />
+      </Header>
+      <Detail>
+        <FiMail /> {user.email}
+      </Detail>
+      <Detail>
+        <FiPhone /> {user.phone}
+      </Detail>
+    </Card>
   );
 };
