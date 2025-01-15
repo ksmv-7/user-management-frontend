@@ -3,6 +3,7 @@ import { UserCard } from './UserCard';
 import { useListPaginatedUsers } from '../../../hooks/crud/user/useReadUser';
 import { LoadMoreButton } from '../common/Button';
 import { useNavigate } from 'react-router-dom';
+import { SearchBar } from '../common/SearchBar';
 
 const Grid = styled.div`
   display: grid;
@@ -17,7 +18,6 @@ export const UserList = () => {
     paginatedUsersData,
     fetchNextPage,
     hasNextPage,
-    isFetching,
     isFetchingNextPage,
     isPaginatedUsersLoading,
     isPaginatedUsersError,
@@ -36,6 +36,7 @@ export const UserList = () => {
 
   return (
     <>
+      <SearchBar />
       <Grid>
         {users.map((user) => (
           <UserCard key={user.id} user={user} />
@@ -50,7 +51,6 @@ export const UserList = () => {
         />
       </div>
 
-      {isFetching && !isFetchingNextPage && <div>Fetching...</div>}
     </>
   );
 };

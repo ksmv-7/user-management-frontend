@@ -1,8 +1,7 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { fetchUsers } from "../../../api/users.service";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { fetchDebouncedUsers, fetchPaginatedUsers } from "../../../api/users.service";
 
 export const useListPaginatedUsers = () => {
-
   const {
     data,
     fetchNextPage,
@@ -12,8 +11,8 @@ export const useListPaginatedUsers = () => {
     isLoading,
     isError,
   } = useInfiniteQuery({
-    queryKey: ['users'],
-    queryFn: ({ pageParam = 1 }) => fetchUsers({ pageParam, limit: 3 }),
+    queryKey: ['users', 'paginated'],
+    queryFn: ({ pageParam = 1 }) => fetchPaginatedUsers({ pageParam, limit: 3 }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage,
   });
@@ -26,5 +25,25 @@ export const useListPaginatedUsers = () => {
     hasNextPage,
     isFetching,
     isFetchingNextPage,
+  }
+};
+
+export const useListDebouncedUsers = (query: string) => {
+  const {
+    data,
+    isFetching,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ['users', 'debounced', query],
+    queryFn: () => fetchDebouncedUsers(query),
+    enabled: query?.length >= 3,
+  });
+
+  return {
+    debouncedUsersData: data,
+    isDebouncedUsersLoading: isLoading,
+    isDebouncedUsersError: isError,
+    isFetching,
   }
 };
