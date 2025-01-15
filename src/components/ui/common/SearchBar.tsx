@@ -19,7 +19,6 @@ const SearchInput = styled.input`
   border: 1px solid #ccc;
   border-radius: 4px;
 
-  /* More "beautiful" styling */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   transition: border-color 0.3s, box-shadow 0.3s;
 
