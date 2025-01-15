@@ -1,5 +1,6 @@
 import styled  from "styled-components";
 import { useNavigate } from 'react-router-dom';
+import { useCallback } from "react";
 
 type ButtonProps = {
   onClick: () => void;
@@ -71,9 +72,9 @@ const Button = styled.button`
 export const AddUserButton = () => {
   const navigate = useNavigate();
 
-  const handleAddUser = () => {
+  const handleAddUser = useCallback(() => {
     navigate('/users/new');
-  };
+  }, [navigate]);
 
   return <Button onClick={handleAddUser}>Add User</Button>;
 };

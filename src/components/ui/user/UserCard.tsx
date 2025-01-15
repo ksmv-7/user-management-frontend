@@ -4,6 +4,7 @@ import { User } from '../../../types/user/types';
 import { Link } from 'react-router-dom';
 import { DeleteButton } from '../common/Button';
 import { useDeleteUser } from '../../../hooks/crud/user/useMutateUser';
+import { useCallback } from 'react';
 
 const Card = styled.div`
   background: #fff;
@@ -53,9 +54,9 @@ export const UserCard = ({ user, onClick }: UserCardProps) => {
   
   const { deleteUserMutation } = useDeleteUser();
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     deleteUserMutation(user.id);
-  };
+  },[deleteUserMutation, user.id]);
 
   return (
     <Card onClick={() => onClick(user)}>

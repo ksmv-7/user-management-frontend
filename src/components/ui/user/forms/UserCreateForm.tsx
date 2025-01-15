@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { UserSchema } from '../../../../schemas/user.schema';
 import styled from 'styled-components';
 import { useCreateUser } from '../../../../hooks/crud/user/useMutateUser';
+import { useCallback } from 'react';
 
 type FormValues = {
   name: string;
@@ -96,10 +97,9 @@ export const UserCreateForm = () => {
   });
 
   
-  const onSubmit = async (values: FormValues) => {
-  
+  const onSubmit = useCallback(async (values: FormValues) => {
     createUserMutation( values );
-  };  
+  },[createUserMutation]);  
   return (
     <FormWrapper>
       <Title>Create User</Title>

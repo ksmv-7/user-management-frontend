@@ -7,6 +7,7 @@ import { useSelectedUser } from '../../../context/user/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { AddUserButton } from '../common/Button';
 import { User } from '../../../types/user/types';
+import { useCallback } from 'react';
 
 const Grid = styled.div`
   display: grid;
@@ -27,6 +28,10 @@ export const UserList = () => {
 
   const { setSelectedUser } = useSelectedUser();
   const navigate = useNavigate();
+  
+  const handleClickUser = useCallback((user: User) => {
+    setSelectedUser(user);
+  }, [setSelectedUser]);
 
   if (isPaginatedUsersLoading) {
     return <p>Loading users...</p>;
@@ -35,9 +40,6 @@ export const UserList = () => {
     navigate('/error');
   }
 
-  const handleClickUser = (user: User) => {
-    setSelectedUser(user);
-  };
 
   const users = paginatedUsersData?.pages.flatMap((group) => group.users) || [];
 

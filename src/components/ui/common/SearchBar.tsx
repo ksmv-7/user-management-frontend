@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
 import { useDebounce } from '../../../hooks/common/useDebounce';
 import { useListDebouncedUsers } from '../../../hooks/crud/user/useReadUser';
@@ -65,14 +65,14 @@ export const SearchBar = () => {
     const { setSelectedUser } = useSelectedUser();
   const navigate = useNavigate();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
-  };
+  }, []);
 
-  const handleResultClick = (user: User) => {
+  const handleResultClick = useCallback((user: User) => {
     navigate(`/users/${user.id}`);
     setSelectedUser(user)
-  };
+  }, [navigate, setSelectedUser]);
   const userData = debouncedUsersData ?? [];
 
   return (
