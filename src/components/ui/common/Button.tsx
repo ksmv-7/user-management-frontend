@@ -53,7 +53,7 @@ export const DeleteButton = ({ onClick }: ButtonProps) => {
   );
 };
 
-const Button = styled.button`
+const AddUserButtonStyle = styled.button`
   background-color: #007bff;
   color: white;
   border: none;
@@ -76,5 +76,5 @@ export const AddUserButton = () => {
     navigate('/users/new');
   }, [navigate]);
 
-  return <Button onClick={handleAddUser}>Add User</Button>;
+  return <AddUserButtonStyle onClick={handleAddUser}>Add User</AddUserButtonStyle>;
 };
